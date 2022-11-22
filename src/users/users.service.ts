@@ -12,7 +12,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     if (
       !createUserDto.email ||
       !createUserDto.name ||
@@ -20,15 +20,35 @@ export class UsersService {
     ) {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     }
+
+    const users = await this.usersRepository.find();
+
+    const userAlreadyExists = users.find(
+      (element) => element.email === createUserDto.email,
+    );
+
+    if (userAlreadyExists) {
+      throw new HttpException(
+        'This email is already being used',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return this.usersRepository.save(createUserDto);
   }
 
   findAll() {
-    return this.usersRepository.find();
+    return this.usersRepository
+      .createQueryBuilder('users')
+      .select(['users.id', 'users.name', 'users.email'])
+      .getMany();
   }
 
   async findOne(id: number) {
-    const user = await this.usersRepository.findOneBy({ id });
+    const user = await this.usersRepository
+      .createQueryBuilder('users')
+      .select(['users.id', 'users.name', 'users.email'])
+      .where('users.id = :id', { id: id })
+      .getOne();
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -48,7 +68,11 @@ export class UsersService {
       .where('id = :id', { id: id })
       .execute();
 
-    const user = await this.usersRepository.findOneBy({ id });
+    const user = await this.usersRepository
+      .createQueryBuilder('users')
+      .select(['users.id', 'users.name', 'users.email'])
+      .where('users.id = :id', { id: id })
+      .getOne();
 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -59,5 +83,11 @@ export class UsersService {
 
   async remove(id: number) {
     return await this.usersRepository.delete(id);
+  }
+
+  async login(email: string) {
+    const user = await this.usersRepository.findOneBy({ email });
+
+    return user;
   }
 }

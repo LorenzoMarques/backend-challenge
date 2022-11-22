@@ -1,11 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Movie } from 'src/movies/entities/movie.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -13,4 +14,7 @@ export class User {
 
   @Column()
   name: string;
+
+  @OneToMany(() => Movie, (movie) => movie.user)
+  movies: Movie[];
 }
