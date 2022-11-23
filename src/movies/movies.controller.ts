@@ -14,16 +14,21 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { UsersService } from 'src/users/users.service';
 
 @ApiTags('movies')
 @Controller('movies')
 export class MoviesController {
-  constructor(private readonly moviesService: MoviesService) {}
+  constructor(
+    private readonly moviesService: MoviesService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createMovieDto: CreateMovieDto, @Request() req) {
-    return this.moviesService.create(createMovieDto, req.user.userId);
+    const user = await this.usersService.login(req.user.username);
+    return this.moviesService.create(createMovieDto, user.id);
   }
 
   @UseGuards(JwtAuthGuard)
