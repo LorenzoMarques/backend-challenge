@@ -24,11 +24,7 @@ import * as redisStore from 'cache-manager-redis-store';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.HOST,
-      port: parseInt(<string>process.env.PORT),
-      username: process.env.USER,
-      password: process.env.PASSWORD,
-      database: process.env.DATABASE,
+      url: process.env.DATABASE_URL,
       synchronize: true,
       autoLoadEntities: true,
       entities: [User, Movie],
