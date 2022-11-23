@@ -95,8 +95,6 @@ url base da aplicação no heroku: https://backend-challenge-mks.herokuapp.com/a
 	}
 ```
 
-```
-
 
 # <p align="center">POST</p>
 
