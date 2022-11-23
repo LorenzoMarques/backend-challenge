@@ -11,6 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Cache } from 'cache-manager';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -41,6 +42,8 @@ export class UsersService {
         HttpStatus.BAD_REQUEST,
       );
     }
+
+    createUserDto.password = bcrypt.hashSync(createUserDto.password, 8);
     return this.usersRepository.save(createUserDto);
   }
 
