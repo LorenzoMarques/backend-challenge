@@ -19,17 +19,15 @@ export class AuthService {
       const { password, ...result } = user;
       return result;
     }
-    return null;
+    throw new HttpException(
+      'Wrong username or password',
+      HttpStatus.UNAUTHORIZED,
+    );
   }
 
   async login(@Body() loginDto: LoginDto) {
     const payload = { username: loginDto.username, sub: loginDto.id };
-    if (!loginDto.username && !loginDto.id) {
-      throw new HttpException(
-        'username and password missing',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+
     return {
       access_token: this.jwtService.sign(payload, {
         privateKey: jwtConstants.secret,

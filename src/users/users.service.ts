@@ -84,7 +84,7 @@ export class UsersService {
       .set({
         username: updateUserDto.username,
         name: updateUserDto.name,
-        password: updateUserDto.password,
+        password: bcrypt.hashSync(updateUserDto.password, 8),
       })
       .where('id = :id', { id: id })
       .execute();
