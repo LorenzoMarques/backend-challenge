@@ -1,73 +1,243 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+<h1 align="center">Backend-challenge-mks</h1>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Tabela de conteúdo
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+<!--ts-->
+ - [Sobre](#Sobre)
+ - [Integrantes](#Integrantes)
+ - [Aplicação](#Aplicação)
+ - [Rotas](#Rotas)
+    - [GET](#GET)
+    - [POST](#POST)
+    - [PATCH](#PATCH)
+    - [DELETE](DELETE)
+<!--te-->
 
-## Description
+<br>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Sobre
 
-## Installation
+- Esta é uma aplicação onde o usuário pode se cadastrar e criar filmes no banco de dados.
+  <br>
 
-```bash
-$ yarn install
+# Integrantes
+
+- <a href="https://github.com/LorenzoMarques">Lorenzo Marques.</a> <br>
+  <br>
+
+# Aplicação
+
+url base da aplicação no heroku: https://backend-challenge-mks.herokuapp.com/api
+
+# Rotas
+
+# <p align="center">GET</p>
+
+1.1 - Para listar todos os usuários, utilize a a rota: <br>
+`GET /users - formato de resposta - status 200`
+
+```json
+[
+	{
+		"id": 3,
+		"username": "username2",
+		"name": "teste"
+	},
+	{
+		"id": 1,
+		"username": "updated",
+		"name": "123"
+	}
+]
 ```
 
-## Running the app
+1.2 - Para ler os dados de um usuário especifico, utilize a rota:<br>
+`GET /users/<user_id> - formato de resposta - status 200`
 
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+```json
+	{
+		"id": 3,
+		"username": "username2",
+		"name": "teste"
+	}
 ```
 
-## Test
 
-```bash
-# unit tests
-$ yarn run test
+1.3 - Para fazer uma listagem de todos os filmes, utilize a rota:<br>
+`GET /movies - formato de resposta - 200`
 
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+```json
+[
+	{
+		"id": 2,
+		"name": "beibe",
+		"genre": "aventura",
+		"userId": 3
+	},
+	{
+		"id": 3,
+		"name": "Harry potter",
+		"genre": "ação",
+		"userId": 2
+	}
+]
 ```
 
-## Support
+1.4 - Para ler os dados de um filme especifico, utilize a rota:<br>
+`GET /movies/<movie_id> - formato de resposta - 200`
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```json
+	{
+		"id": 3,
+		"name": "Harry potter",
+		"genre": "ação",
+		"userId": 2
+	}
+```
 
-## Stay in touch
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+# <p align="center">POST</p>
 
-Nest is [MIT licensed](LICENSE).
+2.1 - Para criar uma conta de usuario, utilize a rota:<br>
+`POST /users - formato de requisição`
+
+```json
+{
+  "name": "andre",
+  "username": "andrerodriguessil",
+  "password": "admin123",
+}
+```
+
+`POST /users - formato de resposta - 201`
+
+```json
+{
+  "name": "andre",
+  "username": "andrerodriguessil",
+	"id": 4
+}
+```
+
+2.2 - Para fazer login em uma conta, utilize a rota:<br>
+`POST /auth/login - formato de requisição`
+
+```json
+{
+  "email": "andrerodriguess",
+  "password": "admin123"
+}
+```
+
+`POST /auth/login - formato de resposta - 200`
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFuZHJlcm9kcmlndWVzc2lsQGdtYWlsLmNvbSIsImlhdCI6MTY1MzYyMDIwOSwiZXhwIjoxNjUzNzA2NjA5fQ.fPnervTSxD4JvoTpgvitV23GDhy328iH9zHKb-eCS0w"
+}
+```
+
+2.3 - Para criar criar um filme, utilize a rota:<br>
+Atenção! É necessário ter um token de autorização para acessar essa rota:<br>
+
+`POST /movies - formato de requisição`
+
+```json
+{
+		"name": "Harry potter",
+		"genre": "outros"
+}
+```
+
+`POST /movies - formato de resposta - 201`
+
+```json
+{
+	"name": "Harry potter",
+	"genre": "outros",
+	"user": {
+		"id": 3,
+		"username": "username2",
+		"name": "teste"
+	},
+	"userId": 3,
+	"id": 3
+}
+```
+
+```
+
+# <p align="center">PATCH</p>
+
+3.1 - Para atualizar os dados de um usuario, utilize a rota:<br>
+Atenção! É necessário ter um token de autorização para acessar essa rota.<br>
+`PATCH /users/<user_id> formato de requisição`
+
+```json
+{
+  "username": "rodrigues_andre",
+  "name": "André Rodrigues",
+  "password": "@andreAdmin"
+}
+```
+
+`PATCH /users/<user_id> - formato de resposta - 200`
+
+```json
+{
+	"id": 1,
+  "username": "rodrigues_andre",
+  "name": "André Rodrigues",
+}
+```
+
+3.2 - Para atualizar os dados de uma musica, utilize a rota:<br>
+Atenção! É necessário ter um token de autorização para acessar essa rota.<br>
+`PATCH /movies/<movie_id>> formato de requisição`
+
+```json
+{
+		"name": "updated",
+		"genre": "updated"
+}
+```
+
+`PATCH /movies/<movie_id>/ - formato de resposta - 200`
+
+```json
+{
+	"id": 2,
+	"name": "updated",
+	"genre": "updated",
+	"userId": 3
+}
+```
+
+
+
+# <p align="center">DELETE</p>
+
+4.1 - Para deletar um filme, utilize a rota:<br>
+Atenção! É necessário ter um token de autorização para acessar essa rota.<br>
+`DELETE /musics/<music_id> - formato de resposta - 200`
+
+```json
+{
+	"raw": [],
+	"affected": 0
+}
+```
+
+4.2 - Para deletar um usuario, utilize a rota:<br>
+Atenção! É necessário ter um token de autorização para acessar essa rota.<br>
+`DELETE /users/<user_id> - formato de resposta - 200`
+
+```json
+{
+	"raw": [],
+	"affected": 1
+}
+```
+
