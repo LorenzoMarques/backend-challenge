@@ -165,8 +165,6 @@ Atenção! É necessário ter um token de autorização para acessar essa rota:<
 }
 ```
 
-```
-
 # <p align="center">PATCH</p>
 
 3.1 - Para atualizar os dados de um usuario, utilize a rota:<br>
