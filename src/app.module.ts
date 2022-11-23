@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,10 +11,17 @@ import { UsersService } from './users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { MoviesModule } from './movies/movies.module';
 import { Movie } from './movies/entities/movie.entity';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    CacheModule.register({
+      isGlobal: true,
+      store: redisStore,
+      host: 'localhost',
+      port: 8080,
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.HOST,

@@ -1,20 +1,28 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
     if (
-      !createUserDto.email ||
+      !createUserDto.username ||
       !createUserDto.name ||
       !createUserDto.password
     ) {
@@ -24,29 +32,39 @@ export class UsersService {
     const users = await this.usersRepository.find();
 
     const userAlreadyExists = users.find(
-      (element) => element.email === createUserDto.email,
+      (element) => element.username === createUserDto.username,
     );
 
     if (userAlreadyExists) {
       throw new HttpException(
-        'This email is already being used',
+        'This username is already being used',
         HttpStatus.BAD_REQUEST,
       );
     }
     return this.usersRepository.save(createUserDto);
   }
 
-  findAll() {
-    return this.usersRepository
-      .createQueryBuilder('users')
-      .select(['users.id', 'users.name', 'users.email'])
-      .getMany();
+  async findAll() {
+    const cachedData = await this.cacheManager.get('cached_itens');
+
+    if (cachedData) {
+      return cachedData;
+    }
+    await this.cacheManager.set(
+      'cached_itens',
+      await this.usersRepository
+        .createQueryBuilder('users')
+        .select(['users.id', 'users.name', 'users.username'])
+        .getMany(),
+    );
+
+    return await this.cacheManager.get('cached_itens');
   }
 
   async findOne(id: number) {
     const user = await this.usersRepository
       .createQueryBuilder('users')
-      .select(['users.id', 'users.name', 'users.email'])
+      .select(['users.id', 'users.name', 'users.username'])
       .where('users.id = :id', { id: id })
       .getOne();
     if (!user) {
@@ -61,7 +79,7 @@ export class UsersService {
       .createQueryBuilder()
       .update(User)
       .set({
-        email: updateUserDto.email,
+        username: updateUserDto.username,
         name: updateUserDto.name,
         password: updateUserDto.password,
       })
@@ -70,7 +88,7 @@ export class UsersService {
 
     const user = await this.usersRepository
       .createQueryBuilder('users')
-      .select(['users.id', 'users.name', 'users.email'])
+      .select(['users.id', 'users.name', 'users.username'])
       .where('users.id = :id', { id: id })
       .getOne();
 
@@ -85,8 +103,8 @@ export class UsersService {
     return await this.usersRepository.delete(id);
   }
 
-  async login(email: string) {
-    const user = await this.usersRepository.findOneBy({ email });
+  async login(username: string) {
+    const user = await this.usersRepository.findOneBy({ username });
 
     return user;
   }

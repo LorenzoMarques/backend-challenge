@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -10,8 +11,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.login(email);
+  async validateUser(username: string, pass: string): Promise<any> {
+    const user = await this.usersService.login(username);
 
     if (user && user.password === pass) {
       const { password, ...result } = user;
@@ -20,8 +21,14 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { username: user.email, sub: user.id };
+  async login(@Body() loginDto: LoginDto) {
+    const payload = { username: loginDto.username, sub: loginDto.id };
+    if (!loginDto.username && !loginDto.id) {
+      throw new HttpException(
+        'username and password missing',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return {
       access_token: this.jwtService.sign(payload, {
         privateKey: jwtConstants.secret,
