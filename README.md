@@ -124,7 +124,7 @@ url base da aplicação no heroku: https://backend-challenge-mks.herokuapp.com/a
 
 ```json
 {
-  "email": "andrerodriguess",
+  "username": "andrerodriguess",
   "password": "admin123"
 }
 ```
